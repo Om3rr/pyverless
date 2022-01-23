@@ -42,7 +42,7 @@ extra_requirements = [
 ]
 
 setup(
-    name="pyverless",
+    name="sls.python",
     url="https://github.com/Om3rr/pyverless",
     license="BSD",
     description="Serverless for translator for pythonistas",

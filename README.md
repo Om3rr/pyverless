@@ -6,8 +6,13 @@ can be used accross the organizations **AS A CODE**
 
 ### Getting Started
 
+install pyverless using the following command
+```bash
+pip install sls.python
+```
+than define your serverless file using the following syntax
 ```python
-#main.py
+#sls.py
 
 from pyverless import ServerlessFramework, Provider, Function, FunctionEvent, EventTypes
 
@@ -30,7 +35,7 @@ Function(
 )
 ```
 
-Than run `pyls main:sls` and check the `serverless.yml` that created. it will create [this](https://github.com/serverless/examples/blob/master/aws-python/serverless.yml) example serverless.yml file.
+Than run `pyls sls:sls` and check the `serverless.yml` that created. it will create [this](https://github.com/serverless/examples/blob/master/aws-python/serverless.yml) example serverless.yml file.
 *According to sls fw, package.json is not mendatory so right now pyverless wont maintain a package.json file*
 
 ### Key Features:
