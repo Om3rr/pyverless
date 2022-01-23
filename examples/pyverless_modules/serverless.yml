@@ -1,0 +1,103 @@
+frameworkVersion: 2.70.0
+service: ras
+provider:
+  iam:
+    role:
+      statements:
+      - Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+        Effect: Allow
+        Resource: arn:aws:dynamodb:*:*:table/ras-*
+  lambdaHashingVersion: '20201221'
+  name: aws
+  runtime: python3.8
+plugins:
+- serverless-wsgi
+- serverless-python-requirements
+custom:
+  wsgi:
+    app: app.app
+functions:
+  sns_function:
+    handler: sns_function.handler
+    events:
+    - sns: arn:aws:sns:us-east-1:123456789012:my-topic
+package: {}
+resources:
+- Resources:
+    DatabasesamplenameDbCpuAlarm:
+      Properties:
+        AlarmActions: []
+        AlarmDescription: CPU Utilization Alarm for DatabaseSampleName
+        ComparisonOperator: GreaterThanOrEqualToThreshold
+        Dimensions:
+        - Name: DBInstanceIdentifier
+          Value: DatabaseSampleArn
+        EvaluationPeriods: 3
+        MetricName: CPUUtilization
+        Namespace: AWS/RDS
+        Period: 60
+        Statistic: Average
+        Threshold: 90
+        TreatMissingData: breaching
+        Unit: Percent
+      Type: AWS::CloudWatch::Alarm
+    DatabasesamplenameDbFreeableMemoryAlarm:
+      Properties:
+        AlarmActions:
+        - SNSAlarmARN
+        AlarmDescription: CPU Utilization Alarm for DatabaseSampleName
+        ComparisonOperator: LessThanOrEqualToThreshold
+        Dimensions:
+        - Name: DBInstanceIdentifier
+          Value: DatabaseSampleArn
+        EvaluationPeriods: 3
+        MetricName: FreeableMemory
+        Namespace: AWS/RDS
+        Period: 60
+        Statistic: Average
+        Threshold: '1000'
+        TreatMissingData: breaching
+        Unit: Bytes
+      Type: AWS::CloudWatch::Alarm
+- Resources:
+    OtherdatabasenameDbCpuAlarm:
+      Properties:
+        AlarmActions: []
+        AlarmDescription: CPU Utilization Alarm for OtherDatabaseName
+        ComparisonOperator: GreaterThanOrEqualToThreshold
+        Dimensions:
+        - Name: DBInstanceIdentifier
+          Value: OtherDatabaseSampleArn
+        EvaluationPeriods: 3
+        MetricName: CPUUtilization
+        Namespace: AWS/RDS
+        Period: 60
+        Statistic: Average
+        Threshold: 90
+        TreatMissingData: breaching
+        Unit: Percent
+      Type: AWS::CloudWatch::Alarm
+    OtherdatabasenameDbFreeableMemoryAlarm:
+      Properties:
+        AlarmActions:
+        - SNSAlarmARN
+        AlarmDescription: CPU Utilization Alarm for OtherDatabaseName
+        ComparisonOperator: LessThanOrEqualToThreshold
+        Dimensions:
+        - Name: DBInstanceIdentifier
+          Value: OtherDatabaseSampleArn
+        EvaluationPeriods: 3
+        MetricName: FreeableMemory
+        Namespace: AWS/RDS
+        Period: 60
+        Statistic: Average
+        Threshold: '1000'
+        TreatMissingData: breaching
+        Unit: Bytes
+      Type: AWS::CloudWatch::Alarm

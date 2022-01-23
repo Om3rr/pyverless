@@ -1,0 +1,26 @@
+frameworkVersion: 2.70.0
+service: ras
+provider:
+  lambdaHashingVersion: '20201221'
+  name: aws
+  runtime: python3.8
+custom:
+  param_api_timeout_mapping:
+    default: 30
+    us-east-1: 10
+    us-east-2: 20
+  param_memory_size_mapping:
+    default: 256
+    dev_us-east-1: 128
+    prod_eu-west-1: 512
+    prod_us-east-1: 1024
+functions:
+  api:
+    handler: api.handler
+    memorySize: ${self:custom.param_memory_size_mapping.${opt:stage}_${opt:region},
+      self:custom.param_memory_size_mapping.default}
+    timeout: ${self:custom.param_api_timeout_mapping.${opt:region}, self:custom.param_api_timeout_mapping.default}
+    environment:
+      AWS_REGION: ${opt:region}
+      STAGE: ${opt:stage}
+package: {}

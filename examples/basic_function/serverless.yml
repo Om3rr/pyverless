@@ -1,0 +1,24 @@
+frameworkVersion: ~2.0.0
+service: ras
+provider:
+  lambdaHashingVersion: '20201221'
+  name: aws
+  runtime: python3.8
+plugins:
+- serverless-wsgi
+- serverless-python-requirements
+custom:
+  wsgi:
+    app: app.app
+functions:
+  api:
+    handler: wsgi_handler.handler
+    events:
+    - http:
+        method: ANY
+        path: /
+    - httpApi:
+        method: ANY
+        path: /{proxy+}
+package: {}
+resources: []
